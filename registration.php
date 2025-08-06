@@ -1,8 +1,7 @@
 <?php
+    require_once 'config/database.php';
 
-    $errors =[
-
-    ];
+    $errors =[];
 
 //  condition pour vérifier si on a reçu une request en post (formulaire)
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -39,8 +38,14 @@
         }elseif ( $password !== $confirmPassword ) {
             $errors[] = "mot de passe doivent etre identique";
         };
+
+        if (empty)
+
+
     };
          
+
+
     // var_dump("$name,$email,$password,$confirmPassword");
 ?>
 
@@ -59,9 +64,14 @@
     <main>
         <section class="formContainer">
             <form action="" method="POST">
+            <?php
+                foreach ($errors as $error) {
+                    echo $error;
+                }
+            ?>
                 <div>
-                    <label for="name">Pseudo</label>
-                    <input type="text" name="name" id="name" required placeholder="Entrez votre Pseudo">
+                    <label for="username">Pseudo</label>
+                    <input type="text" name="username" id="username" required placeholder="Entrez votre Pseudo">
                 </div>
                 <div>
                     <label for="email">e-mail</label>
