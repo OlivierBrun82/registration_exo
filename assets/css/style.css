@@ -1,0 +1,46 @@
+/* ALL */
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* HEADER */
+
+header {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+
+/* MAIN */
+
+main {
+    background-color: grey;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formContainer {
+    width: 250px;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: auto;
+    
+}
+
+/* FOOTER */
+
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
