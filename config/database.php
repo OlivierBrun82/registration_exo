@@ -1,22 +1,24 @@
 <?php
+    // logique de connexion a la database
     // Information pour se connecter
-    //  l'endroit où est ma database
-$host = "localhost";
-    //  Le nom de la DB
-$dbname = "user";
-    //  Identifiant de connexion
-$username = "root";
-    //  password
-$password = "*KLp4osj&3PC!29^$^tq%64Q7z7$2i$^";
-    // port
-$port= 80;
-    // charset
-$charset= "utf8mb4";
-
+    // l'endroit où est ma database
     // function qui crée et renvoi une connection à la db
 function dbConnexion() {
+    $host = "localhost";
+        //  Le nom de la DB
+    $dbname = "user";
+        //  Identifiant de connexion
+    $username = "root";
+        //  password
+    $password = "*KLp4osj&3PC!29^$^tq%64Q7z7$2i$^";
+        // port
+    $port= 80;
+        // charset
+    $charset= "utf8mb4";
+
+
     //transforme mes variable en global (accessible partout)
-    global $host, $dbname, $password, $username, $port, $charset;
+    // global $host, $dbname, $password, $username, $port, $charset;
 
     try {
         // mes param de co

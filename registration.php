@@ -1,16 +1,18 @@
 <?php
     require_once 'config/database.php';
 
-    $errors =[];
-
-//  condition pour vérifier si on a reçu une request en post (formulaire)
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // var_dump($_POST);
-        // récupération des données
-        $name = (trim(htmlspecialchars($_POST["name"])));
-        $email = (trim(htmlspecialchars ($_POST["email"])));
-        $password =  $_POST["password"];
-        $confirmPassword = $_POST["confirmPassword"];
+    $errors = [];
+    $message = "";
+    // =========================================
+    // condition qui contient la logique de traitement du formulaire quand on recoit une request POST
+    // ==========================================
+    if ($_SERVER["REQUEST_METHOD"] === "POST"){
+        //recuperation des données du formulaire
+        //nettoyage des données du formulaire
+        $username = trim(htmlspecialchars($_POST["username"]) ?? '');
+        $email = trim(htmlspecialchars($_POST["email"]) ?? '');
+        $password = $_POST["password"] ?? '';
+        $confirmPassword = $_POST["confirmPassword"] ?? '';
 
         //validation username
         //valide que le champ soit remplis
@@ -29,6 +31,7 @@
         }elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $errors[] = "votre adresse ne correspond au format mail classique";
         }
+
         //validation password
         if (empty($password)) {
             $errors[] = "password obligatoire";
@@ -37,16 +40,43 @@
             // normalement ici on met un pattern pour le mdp
         }elseif ( $password !== $confirmPassword ) {
             $errors[] = "mot de passe doivent etre identique";
-        };
+        }
 
-        if (empty)
+        if (empty($errors)) {
 
+            //logique de traitement en db
+            $pdo = dbConnexion();
 
-    };
-         
+            //verifier si l'adresse mail est utilisé ou non
+            $checkEmail = $pdo->prepare("SELECT id FROM login WHERE email = ?");
 
+            //la methode execute de mon objet pdo execute la request préparée
+            $checkEmail->execute([$email]);
 
-    // var_dump("$name,$email,$password,$confirmPassword");
+            //une condition pour vérifier si je recupere quelque chose
+            if ($checkEmail->rowCount() > 0) {
+                $errors[] = "email déja utilisé";
+            } else {
+                //dans le cas ou tout va bien ! email pas utilisé
+
+                //hashage du mdp avec la fonction password_hash
+                $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                //insertion des données en db
+                // INSERT INTO users (username, email, password)VALUES ("atif","atif@gmail.com","lijezfoifjerlkjf")
+                $insertUser = $pdo->prepare("
+                INSERT INTO login (name, email, password) 
+                VALUES (?, ?, ?)
+                ");
+
+                $insertUser->execute([$username, $email, $hashPassword]);
+
+                $message = "super mega cool vous êtes enregistré $username";
+            }
+        }
+
+        
+    }
 ?>
 
 <!DOCTYPE html>
@@ -54,44 +84,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
     <title>Document</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <header>
-        <h1><strong>Formulaire de connection</strong></h1>
-    </header>
-    <main>
-        <section class="formContainer">
-            <form action="" method="POST">
+    <section>
+        <form method="POST">
             <?php
                 foreach ($errors as $error) {
                     echo $error;
                 }
+                if(!empty($message)) {
+                    echo $message;
+                }
             ?>
-                <div>
-                    <label for="username">Pseudo</label>
-                    <input type="text" name="username" id="username" required placeholder="Entrez votre Pseudo">
-                </div>
-                <div>
-                    <label for="email">e-mail</label>
-                    <input type="email" name="email" id="email" required placeholder="Entrez votre E-mail">
-                </div>    
-                <div>
-                <label for="password">mot de passe</label>
-                <input type="password" name="password" id="password" required placeholder="Entrez votre mot de passe">
-                </div>
-                <div>
-                <label for="confirmPassword">mot de passe</label>
-                <input type="password" name="confirmPassword" id="confirmPassword" required placeholder="Confirmez votre mot de passe">
-                </div>
-                <input type="submit" value="submit">
-            </form>
-        </section>
-
-    </main>
-    <footer>
-        <span>© Legal Content</span>
-    </footer>    
+            <div>
+                <label for="username">Pseudo</label>
+                <input type="text" id="username" name="username" placeholder="Entrez votre pseudo" required>
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required placeholder="Entrez votre email">
+            </div>
+            <div>
+                <label for="password">password</label>
+                <input type="password" name="password" id="password" required placeholder="entrer votre mdp">
+            </div>
+            <div>
+                <label for="confirmPassword">confirmer password</label>
+                <input type="password" name="confirmPassword" id="confirmPassword" required placeholder="confirmer votre mdp">
+            </div>
+            <div>
+                <input type="submit" value="envoyer">
+            </div>
+        </form>
+    </section>
 </body>
 </html>
