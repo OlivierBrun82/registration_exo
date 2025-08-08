@@ -3,8 +3,8 @@
     padding: 0;
 }
 body {
-    background-color: rgb(41, 173, 147);
-    color: rgb(0, 0, 0);
+    background-color: rgb(63, 141, 70);
+    color: rgb(255, 255, 255);
     padding: 100px;
 }
 form,
@@ -19,5 +19,17 @@ input {
     padding: 6px;
     border: none;
     margin: 6px 0;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(123, 206, 206);
+}
+nav > ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+a{
+    text-decoration: none;
+}
+li{
+    list-style-type: none;
 }

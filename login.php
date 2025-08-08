@@ -3,6 +3,15 @@
 
     session_start();
 
+    // On fait une function qui génère un token d'identification unique
+    function generateToken() {
+    return hash('sha256', uniqid('', true));
+    }
+    // On nomme la function token
+    $token = generateToken();
+
+    
+
     $errors = [];
     $message = "";
 
